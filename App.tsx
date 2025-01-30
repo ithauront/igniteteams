@@ -1,6 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import { Fragment } from 'react';
-import { Groups } from './src/screens/Groups';
+import { Groups } from '@screens/Groups';
 
 export default function App() {
   return (
