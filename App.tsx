@@ -1,14 +1,15 @@
-
-import { Fragment } from 'react';
 import { Groups } from '@screens/Groups';
 import { StatusBar } from 'react-native';
+import { ThemeProvider } from 'styled-components/native';
+import theme from './src/theme';
+
 
 export default function App() {
   return (
-    <Fragment >
+    <ThemeProvider theme={theme} >
        <StatusBar barStyle="light-content" backgroundColor="transparent" translucent />
       <Groups />
-    </Fragment>
+    </ThemeProvider>
   );
 }
 
