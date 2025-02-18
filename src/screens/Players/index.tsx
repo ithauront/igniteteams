@@ -9,12 +9,13 @@ import { useEffect, useRef, useState } from "react";
 import { PlayerCard } from "@components/PlayerCard";
 import { ListEmpty } from "@components/ListEmpty";
 import { Button } from "@components/Button";
-import { useRoute } from "@react-navigation/native";
+import { useNavigation, useRoute } from "@react-navigation/native";
 import { AppError } from "@utils/AppError";
 import { playerAddByGroup } from "@storage/player/playerAddByGroup";
 import { playerGetByGroupAndTeam } from "@storage/player/playersGetByGroupAndTeam";
 import { PlayerStorageDTO } from "@storage/player/PlayerStorageDTO";
 import { playerRemoveByGroup } from "@storage/player/playerRemoveByGroup";
+import { groupRemoveByName } from "@storage/group/groupRemoveByName";
 
 type RouteParams = {
     group: string
@@ -24,6 +25,8 @@ export function Players() {
     const [newPlayerName, setNewPlayerName] = useState('')
     const [team, setTeam] = useState('time A')
     const [players, setPlayers] = useState<PlayerStorageDTO[]>([])
+
+    const navigation = useNavigation()
 
     const route = useRoute()
     const { group } = route.params as RouteParams
@@ -78,6 +81,27 @@ export function Players() {
     
    }
 
+   async function groupRemove() {
+    try{
+        await groupRemoveByName(group)
+        navigation.navigate('groups')
+    } catch(error) {
+        console.log(error)
+        Alert.alert('Remover grupo', 'Não foi possivel remover grupo.')
+    }
+   }
+
+   async function handleGroupRemove() {
+        Alert.alert('Remover', 'Deseja remover o grupo', [
+            {
+                text: 'não', style: 'cancel'
+            },
+            {
+                text: 'sim', onPress: ()=> groupRemove()
+            }
+        ])
+   }
+
    useEffect(()=>{
     fetchPlayersByTeam()
    }, [team])
@@ -130,7 +154,7 @@ export function Players() {
                     ]}
                 />
          
-          <Button title="Remover turma" type="SECONDARY"/>
+          <Button title="Remover turma" type="SECONDARY" onPress={handleGroupRemove}/>
         </Container>
     )
 }
